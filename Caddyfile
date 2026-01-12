@@ -1,0 +1,184 @@
+# The Caddyfile is an easy way to configure your Caddy web server.
+#
+# Unless the file starts with a global options block, the first
+# uncommented line is always the address of your site.
+#
+# To use your own domain name (with automatic HTTPS), first make
+# sure your domain's A/AAAA DNS records are properly pointed to
+# this machine's public IP, then replace ":80" below with your
+# domain name.
+
+:80 {
+	# Set this path to your site's directory.
+	# root * /usr/share/caddy
+
+	# Enable the static file server.
+	# file_server
+
+	# Another common task is to set up a reverse proxy:
+	# reverse_proxy localhost:8080
+
+	# Or serve a PHP site through php-fpm:
+	# php_fastcgi localhost:9000
+	handle_path /doorworld/api* {
+		reverse_proxy localhost:3420
+	}
+
+	handle_path /doorworld* {
+		reverse_proxy localhost:3000
+	}
+}
+
+artmartrade.am www.artmartrade.am {
+	# Automatic HTTPS with Let's Encrypt
+	reverse_proxy localhost:3100
+
+	# Security headers
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Frame-Options "SAMEORIGIN"
+		X-Content-Type-Options "nosniff"
+		X-XSS-Protection "1; mode=block"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+
+	# Enable compression
+	encode gzip zstd
+
+	# Logging
+	log {
+		output file /var/log/caddy/artmartrade-access.log
+		format json
+	}
+}
+
+artestradeservice.am www.artestradeservice.am {
+	# Automatic HTTPS with Let's Encrypt
+	# Caddy will automatically obtain and renew SSL certificates
+
+	# Reverse proxy to the Docker container on localhost:3200
+	reverse_proxy localhost:3200
+
+	# Security headers
+	header {
+		# Enable HSTS
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		# Prevent clickjacking
+		X-Frame-Options "SAMEORIGIN"
+		# Prevent MIME type sniffing
+		X-Content-Type-Options "nosniff"
+		# Enable XSS protection
+		X-XSS-Protection "1; mode=block"
+		# Referrer policy
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+
+	# Enable compression
+	encode gzip zstd
+
+	# Logging
+	log {
+		output file /var/log/caddy/artestradeservice-access.log
+		format json
+	}
+}
+
+artestrade.eu www.artestrade.eu {
+	# Automatic HTTPS with Let's Encrypt
+	# Caddy will automatically obtain and renew SSL certificates
+
+	# Reverse proxy to the Docker container on localhost:3200
+	reverse_proxy localhost:3200
+
+	# Security headers
+	header {
+		# Enable HSTS
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		# Prevent clickjacking
+		X-Frame-Options "SAMEORIGIN"
+		# Prevent MIME type sniffing
+		X-Content-Type-Options "nosniff"
+		# Enable XSS protection
+		X-XSS-Protection "1; mode=block"
+		# Referrer policy
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+
+	# Enable compression
+	encode gzip zstd
+
+	# Logging
+	log {
+		output file /var/log/caddy/artestrade-eu-access.log
+		format json
+	}
+}
+
+mail.teisespaslaugos.lt {
+	# Automatic HTTPS with Let's Encrypt
+	# Reverse proxy to MXRoute webmail
+	reverse_proxy https://webmail.mxroute.com {
+		header_up Host {upstream_hostport}
+		header_up X-Forwarded-Host {host}
+	}
+
+	# Security headers
+	header {
+		# Enable HSTS
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		# Prevent MIME type sniffing
+		X-Content-Type-Options "nosniff"
+		# Enable XSS protection
+		X-XSS-Protection "1; mode=block"
+		# Referrer policy
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+
+	# Enable compression
+	encode gzip zstd
+
+	# Logging
+	log {
+		output file /var/log/caddy/mail-teisespaslaugos-access.log
+		format json
+	}
+}
+
+teisespaslaugos.lt www.teisespaslaugos.lt {
+	# Automatic HTTPS with Let's Encrypt
+	# Caddy will automatically obtain and renew SSL certificates
+
+	# Proxy API requests to backend server
+	handle /api/* {
+		reverse_proxy localhost:3301
+	}
+
+	# Reverse proxy to the frontend on localhost:3300
+	reverse_proxy localhost:3300
+
+	# Security headers
+	header {
+		# Enable HSTS
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		# Prevent clickjacking
+		X-Frame-Options "SAMEORIGIN"
+		# Prevent MIME type sniffing
+		X-Content-Type-Options "nosniff"
+		# Enable XSS protection
+		X-XSS-Protection "1; mode=block"
+		# Referrer policy
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+
+	# Enable compression
+	encode gzip zstd
+
+	# Logging
+	log {
+		output file /var/log/caddy/teisespaslaugos-access.log
+		format json
+	}
+}
+
+# Refer to the Caddy docs for more information:
+# https://caddyserver.com/docs/caddyfile
