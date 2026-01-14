@@ -56,6 +56,10 @@ artestradeservice.am www.artestradeservice.am {
 	# Automatic HTTPS with Let's Encrypt
 	# Caddy will automatically obtain and renew SSL certificates
 
+	handle /api/* {
+        reverse_proxy localhost:3001
+    }
+
 	# Reverse proxy to the Docker container on localhost:3200
 	reverse_proxy localhost:3200
 
@@ -86,6 +90,10 @@ artestradeservice.am www.artestradeservice.am {
 artestrade.eu www.artestrade.eu {
 	# Automatic HTTPS with Let's Encrypt
 	# Caddy will automatically obtain and renew SSL certificates
+
+    handle /api/* {
+        reverse_proxy localhost:3001
+    }
 
 	# Reverse proxy to the Docker container on localhost:3200
 	reverse_proxy localhost:3200
