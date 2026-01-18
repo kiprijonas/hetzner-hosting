@@ -1,0 +1,41 @@
+# patrycia-trade.kg - Main site
+patrycia-trade.kg www.patrycia-trade.kg {
+	reverse_proxy localhost:3600
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Frame-Options "SAMEORIGIN"
+		X-Content-Type-Options "nosniff"
+		X-XSS-Protection "1; mode=block"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+
+	encode gzip zstd
+
+	log {
+		output file /var/log/caddy/patrycia-trade-access.log
+		format json
+	}
+}
+
+# patrycia-trade.kg - Mail proxy
+mail.patrycia-trade.kg {
+	reverse_proxy https://webmail.mxroute.com {
+		header_up Host {upstream_hostport}
+		header_up X-Forwarded-Host {host}
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Content-Type-Options "nosniff"
+		X-XSS-Protection "1; mode=block"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+
+	encode gzip zstd
+
+	log {
+		output file /var/log/caddy/mail-patrycia-trade-access.log
+		format json
+	}
+}

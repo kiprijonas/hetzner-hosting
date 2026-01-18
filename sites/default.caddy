@@ -1,0 +1,10 @@
+# Default site on port 80 (doorworld)
+:80 {
+	handle_path /doorworld/api* {
+		reverse_proxy localhost:3420
+	}
+
+	handle_path /doorworld* {
+		reverse_proxy localhost:3000
+	}
+}
