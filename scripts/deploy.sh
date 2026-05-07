@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Pull latest config on the server, validate, and reload Caddy.
+# Pull latest config on the server, validate, and reload the Caddy container.
 set -euo pipefail
 
 SERVER="${SERVER:-root@46.62.155.60}"
 REMOTE_DIR="${REMOTE_DIR:-/opt/hetzner-hosting}"
-CADDYFILE="${CADDYFILE:-$REMOTE_DIR/Caddyfile}"
+CONTAINER="${CONTAINER:-caddy}"
 
 ssh -o StrictHostKeyChecking=accept-new "$SERVER" bash -s <<EOF
 set -euo pipefail
@@ -14,10 +14,10 @@ echo "==> git pull"
 git pull --ff-only
 
 echo "==> caddy validate"
-caddy validate --config "$CADDYFILE" --adapter caddyfile
+docker compose exec -T "$CONTAINER" caddy validate --config /etc/caddy/Caddyfile
 
-echo "==> caddy reload"
-caddy reload --config "$CADDYFILE" --adapter caddyfile
+echo "==> caddy restart"
+docker compose restart "$CONTAINER"
 
 echo "==> done"
 EOF
