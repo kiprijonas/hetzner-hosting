@@ -24,24 +24,7 @@ interworld.ae www.interworld.ae {
 	}
 }
 
-# interworld.ae - Mail proxy
+# interworld.ae - Mail redirect
 mail.interworld.ae {
-	reverse_proxy https://webmail.mxroute.com {
-		header_up Host {upstream_hostport}
-		header_up X-Forwarded-Host {host}
-	}
-
-	header {
-		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
-		X-Content-Type-Options "nosniff"
-		X-XSS-Protection "1; mode=block"
-		Referrer-Policy "strict-origin-when-cross-origin"
-	}
-
-	encode gzip zstd
-
-	log {
-		output file /var/log/caddy/mail-interworld-access.log
-		format json
-	}
+	redir https://webmail.mxroute.com{uri} permanent
 }
