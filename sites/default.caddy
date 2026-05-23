@@ -1,4 +1,4 @@
-# Default site on port 80 (doorworld)
+# Default site on port 80 (doorworld, biodegra)
 :80 {
 	handle_path /doorworld/api* {
 		reverse_proxy localhost:3420
@@ -6,5 +6,11 @@
 
 	handle_path /doorworld* {
 		reverse_proxy localhost:3000
+	}
+
+	redir /skaiciuokle /skaiciuokle/ 301
+
+	handle_path /skaiciuokle* {
+		reverse_proxy localhost:3700
 	}
 }

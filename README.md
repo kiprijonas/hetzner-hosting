@@ -45,6 +45,7 @@ These ports are bound by services on the host, not by this repo. If you add a si
 | teisespaslaugos.lt | 3300 | 3301 |
 | west-tradeservice.pl | 3500 | 3501 |
 | doorworld (path-routed on :80) | 3000 | 3420 |
+| biodegra (path-routed on :80, `/skaiciuokle`) | 3700 | — |
 
 Note: artestrade.eu and artestradeservice.am share the same backend (3200) and API (3001) — that's deliberate, they're the same app on two domains.
 
