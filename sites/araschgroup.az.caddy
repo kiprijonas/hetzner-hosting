@@ -1,0 +1,24 @@
+# araschgroup.az - Multilingual company site (AZ/RU/EN), static nginx
+araschgroup.az www.araschgroup.az {
+	reverse_proxy localhost:3900
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Frame-Options "SAMEORIGIN"
+		X-Content-Type-Options "nosniff"
+		X-XSS-Protection "1; mode=block"
+		Referrer-Policy "strict-origin-when-cross-origin"
+	}
+
+	encode gzip zstd
+
+	log {
+		output file /var/log/caddy/araschgroup-az-access.log
+		format json
+	}
+}
+
+# araschgroup.az - Mail redirect (email is hosted at MXroute, not on this box)
+mail.araschgroup.az {
+	redir https://webmail.mxroute.com{uri} permanent
+}
